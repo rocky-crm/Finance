@@ -25,10 +25,10 @@ final class Spending extends AbstractCrmController
      */
     private function createGrid(VirtualEntity $entity) : string
     {
-        return $this->view->render('spending', array(
+        return $this->view->render('spending', [
             'spendings' => $this->getModuleService('spendingService')->fetchAll(),
             'entity' => $entity
-        ));
+        ]);
     }
 
     /**
@@ -53,7 +53,7 @@ final class Spending extends AbstractCrmController
      * 
      * @return mixed
      */
-    public function saveAction()
+    public function saveAction() : int
     {
         $input = $this->request->getPost();
 
@@ -67,7 +67,7 @@ final class Spending extends AbstractCrmController
      * @param int $id
      * @return void
      */
-    public function deleteAction(int $id)
+    public function deleteAction(int $id) : void
     {
         $this->getModuleService('spendingService')->deleteById($id);
 

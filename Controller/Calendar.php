@@ -106,7 +106,7 @@ final class Calendar extends AbstractCrmController
      * 
      * @return mixed
      */
-    public function saveAction()
+    public function saveAction() : int
     {
         $input = $this->request->getPost();
 
@@ -120,7 +120,7 @@ final class Calendar extends AbstractCrmController
      * @param int $id
      * @return void
      */
-    public function deleteAction(int $id)
+    public function deleteAction(int $id) : void
     {
         $this->getModuleService('calendarService')->deleteById($id);
 

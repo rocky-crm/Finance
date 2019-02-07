@@ -29,11 +29,11 @@ final class Income extends AbstractCrmController
      */
     private function createGrid(VirtualEntity $entity) : string
     {
-        return $this->view->render('income', array(
+        return $this->view->render('income', [
             'currencies' => $this->getModuleService('currencyService')->fetchList(),
             'incomes' => $this->getModuleService('incomeService')->fetchAll(),
             'entity' => $entity
-        ));
+        ]);
     }
 
     /**
@@ -58,7 +58,7 @@ final class Income extends AbstractCrmController
      * 
      * @return mixed
      */
-    public function saveAction()
+    public function saveAction() : int
     {
         $input = $this->request->getPost();
 
@@ -72,7 +72,7 @@ final class Income extends AbstractCrmController
      * @param int $id
      * @return void
      */
-    public function deleteAction(int $id)
+    public function deleteAction(int $id) : void
     {
         $this->getModuleService('incomeService')->deleteById($id);
 
