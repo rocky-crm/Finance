@@ -33,6 +33,8 @@ final class IncomeService extends AbstractService
     {
         $entity = new VirtualEntity();
         $entity->setId($row['id'])
+               ->setCurrencyId($row['currency_id'])
+               ->setCurrency($row['currency'] ?? null)
                ->setFrom($row['from'])
                ->setDate($row['date'])
                ->setAmount($row['amount'])

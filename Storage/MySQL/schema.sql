@@ -17,6 +17,7 @@ CREATE TABLE rocky_finance_calendar (
 
 CREATE TABLE rocky_finance_income (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `currency_id` INT NOT NULL COMMENT 'Related currency ID',
     `from` varchar(255) NOT NULL,
     `date` DATE NOT NULL COMMENT 'Date of this income',
     `amount` FLOAT NOT NULL,

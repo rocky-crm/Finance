@@ -29,8 +29,22 @@ final class IncomeMapper extends AbstractMapper
      */
     public function fetchAll() : array
     {
-        $db = $this->db->select('*')
+        $columns = [
+            self::column('id'),
+            self::column('currency_id'),
+            self::column('from'),
+            self::column('date'),
+            self::column('amount'),
+            self::column('comment'),
+            CurrencyMapper::column('code') => 'currency',
+        ];
+
+        $db = $this->db->select($columns)
                        ->from(self::getTableName())
+                       // Currency relation
+                       ->leftJoin(CurrencyMapper::getTableName(), [
+                            CurrencyMapper::column('id') => self::getRawColumn('currency_id')
+                       ])
                        ->orderBy($this->getPk())
                        ->desc();
 
