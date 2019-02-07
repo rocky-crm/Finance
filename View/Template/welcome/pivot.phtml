@@ -1,0 +1,61 @@
+<?php
+
+use Krystal\Form\Element;
+
+defined('KRYSTAL') or die;
+
+?>
+
+<h2 class="page-header"><?php $this->show('Pivot table'); ?></h2>
+
+<form action="<?= $this->url('Finance:Calendar@pivotAction', null); ?>">
+    <div class="row">
+        <div class="col-lg-2">
+            <?= Element::select('currency_id', $currencies, $currencyId, ['class' => 'form-control']); ?>
+        </div>
+
+        <div class="col-lg-2">
+            <?= Element::submit('Filter', ['class' => 'btn btn-primary']); ?>
+        </div>
+    </div>
+</form>
+
+<br />
+
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Spending</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <?php foreach ($data['data'] as $item): ?>
+        <tr class="info">
+            <td colspan="2"><?= $item['date']; ?></td>
+        </tr>
+        
+        <?php foreach($item['details'] as $detail): ?>
+        <tr>
+            <td><?= $detail['spending']; ?></td>
+            <td><?= number_format($detail['amount'])  . PHP_EOL . $data['currency']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+        
+        <tr>
+            <td colspan="2">
+                <span class="pull-right">Total spent: <?= number_format($item['sum'])  . PHP_EOL . $data['currency']; ?></span>
+            </td>
+        </tr>
+        
+        <?php endforeach; ?>
+    </tbody>
+    
+    <tfoot>
+        <tr class="info">
+            <td>Total spends: <?= number_format($data['spendings']); ?></td>
+            <td>Total sum: <?= number_format($data['total'])  . PHP_EOL . $data['currency']; ?></td>
+        </tr>
+    </tfoot>
+</table>

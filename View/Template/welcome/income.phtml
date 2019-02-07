@@ -1,0 +1,102 @@
+<?php
+
+use Krystal\Grid\Grid;
+use Krystal\Form\Element;
+use Site\View\Icon;
+
+defined('KRYSTAL') or die;
+
+?>
+
+<h2 class="page-header"><?php $this->show('Spendings'); ?> <small>(<?= count($incomes); ?>)</small></h2>
+
+<div class="row">
+    <div class="col-lg-6">
+        <?= Grid::render($incomes, [
+            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'rowAttributes' => [
+                'class' => function($current) use ($entity){
+                    return $current['id'] == $entity['id'] ? 'success' : null;
+                }
+            ],
+            'columns' => [
+                [
+                    'column' => 'id',
+                    'label' => '#'
+                ],
+
+                [
+                    'column' => 'from'
+                ],
+
+                [
+                    'column' => 'date'
+                ],
+
+                [
+                    'column' => 'amount'
+                ],
+
+                [
+                    'column' => 'comment'
+                ]
+            ],
+
+            'actions' => [
+                'edit' => function($row){
+                    return Icon::edit(
+                        $this->url('Finance:Income@editAction', $row['id']),
+                        $this->translate('Edit this income')
+                    );
+                },
+
+                'remove' => function($row){
+                    return Icon::remove(
+                        $this->url('Finance:Income@deleteAction', $row['id']),
+                        $this->translate('Remove this income')
+                    );
+                }
+            ]
+
+        ], $this->translator); ?>
+    </div>
+
+    <div class="col-lg-6">
+        <form action="<?= $this->url('Finance:Income@saveAction'); ?>" method="POST" autocomplete="off">
+          <fieldset>
+            <legend><?php $this->show($entity['id'] ? 'Update income' : 'Add new income'); ?></legend>
+
+            <?= Element::hidden('id', $entity['id']); ?>
+
+            <div class="form-group">
+                <label class="control-label"><?php $this->show('From'); ?></label>
+                <?= Element::text('from', $entity['from'], ['class' => 'form-control', 'placeholder' => $this->translate('Where it comes from?')]); ?>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"><?php $this->show('Date'); ?></label>
+                <?= Element::date('date', $entity['date'], ['class' => 'form-control']); ?>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"><?php $this->show('Amount'); ?></label>
+                <?= Element::text('amount', $entity['amount'], ['class' => 'form-control']); ?>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"><?php $this->show('Comment'); ?></label>
+                <?= Element::text('comment', $entity['comment'], ['class' => 'form-control']); ?>
+            </div>
+
+            <div class="form-group">
+                <button data-button="submit" class="btn btn-primary"><?php $this->show('Save'); ?></button>
+
+                <?php if ($entity['id']): ?>
+                <a href="<?= $this->url('Finance:Income@indexAction'); ?>" class="btn btn-danger"><?php $this->show('Cancel'); ?></a>
+                <?php endif; ?>
+            </div>
+          </fieldset>
+        </form>
+    </div>
+</div>
+

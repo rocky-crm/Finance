@@ -1,0 +1,132 @@
+<?php
+
+use Krystal\Grid\Grid;
+use Krystal\Form\Element;
+use Site\View\Icon;
+
+defined('KRYSTAL') or die;
+
+?>
+
+<h2 class="page-header"><?php $this->show('Payment calendar'); ?> <small>(<?= count($calendar); ?>)</small></h2>
+
+<form action="<?= $this->url('Finance:Calendar@exploreAction', null); ?>">
+    <div class="row">
+        <div class="col-lg-3">
+            <?= Element::date('date', $date, ['class' => 'form-control']); ?>
+        </div>
+
+        <div class="col-lg-2">
+            <?= Element::select('currency_id', $currencies, $currencyId, ['class' => 'form-control']); ?>
+        </div>
+
+        <div class="col-lg-2">
+            <?= Element::submit('Filter', ['class' => 'btn btn-primary']); ?>
+        </div>
+    </div>
+</form>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-6">
+        <?= Grid::render($calendar, [
+            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'rowAttributes' => [
+                'class' => function($current) use ($entity){
+                    return $current['id'] == $entity['id'] ? 'success' : null;
+                }
+            ],
+            'columns' => [
+                [
+                    'column' => 'id',
+                    'label' => '#'
+                ],
+
+                [
+                    'column' => 'name'
+                ],
+                
+                [
+                    'column' => 'spending'
+                ],
+
+                [
+                    'column' => 'amount',
+                    'value' => function($row){
+                        return number_format($row['amount']) . PHP_EOL . $row['currency'];
+                    }
+                ]
+            ],
+
+            'actions' => [
+                'edit' => function($row){
+                    return Icon::edit(
+                        $this->url('Finance:Calendar@editAction', $row['id']),
+                        $this->translate('Edit this payment')
+                    );
+                },
+
+                'remove' => function($row){
+                    return Icon::remove(
+                        $this->url('Finance:Calendar@deleteAction', $row['id']),
+                        $this->translate('Remove this payment')
+                    );
+                }
+            ]
+
+        ], $this->translator); ?>
+
+        <span>Total amount: <?= $sum; ?></span>
+    </div>
+
+    <div class="col-lg-6">
+        <form action="<?= $this->url('Finance:Calendar@saveAction'); ?>" method="POST" autocomplete="off">
+          <fieldset>
+            <legend><?php $this->show($entity['id'] ? 'Update payment' : 'Add new payment'); ?></legend>
+
+            <?= Element::hidden('id', $entity['id']); ?>
+
+            <div class="form-group">
+                <label class="control-label"><?php $this->show('Spending category'); ?></label>
+                <?= Element::select('spending_id', $spendings, $entity['spending_id'], ['class' => 'form-control']); ?>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label"><?php $this->show('Amount'); ?></label>
+                        <?= Element::text('amount', $entity['amount'], ['class' => 'form-control', 'placeholder' => $this->translate('Payment amount')]); ?>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label"><?php $this->show('Currency'); ?></label>
+                        <?= Element::select('currency_id', $currencies, $entity['currency_id'], ['class' => 'form-control']); ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"><?php $this->show('Date'); ?></label>
+                <?= Element::date('date', $entity['date'], ['class' => 'form-control', 'placeholder' => $this->translate('Payment date')]); ?>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"><?php $this->show('Name'); ?></label>
+                <?= Element::text('name', $entity['name'], ['class' => 'form-control', 'placeholder' => $this->translate('Purpose')]); ?>
+            </div>
+
+            <div class="form-group">
+                <button data-button="submit" class="btn btn-primary"><?php $this->show('Save'); ?></button>
+
+                <?php if ($entity['id']): ?>
+                <a href="<?= $this->url('Finance:Calendar@indexAction'); ?>" class="btn btn-danger"><?php $this->show('Cancel'); ?></a>
+                <?php endif; ?>
+            </div>
+          </fieldset>
+        </form>
+    </div>
+</div>
+
