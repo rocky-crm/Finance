@@ -34,7 +34,10 @@ defined('KRYSTAL') or die;
                 ],
 
                 [
-                    'column' => 'amount'
+                    'column' => 'amount',
+                    'value' => function($row){
+                        return number_format($row['amount']) . PHP_EOL . $row['currency'];
+                    }
                 ],
 
                 [
@@ -78,9 +81,20 @@ defined('KRYSTAL') or die;
                 <?= Element::date('date', $entity['date'], ['class' => 'form-control']); ?>
             </div>
 
-            <div class="form-group">
-                <label class="control-label"><?php $this->show('Amount'); ?></label>
-                <?= Element::text('amount', $entity['amount'], ['class' => 'form-control']); ?>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label"><?php $this->show('Amount'); ?></label>
+                        <?= Element::text('amount', $entity['amount'], ['class' => 'form-control', 'placeholder' => $this->translate('Payment amount')]); ?>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label"><?php $this->show('Currency'); ?></label>
+                        <?= Element::select('currency_id', $currencies, $entity['currency_id'], ['class' => 'form-control']); ?>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">

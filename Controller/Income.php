@@ -30,6 +30,7 @@ final class Income extends AbstractCrmController
     private function createGrid(VirtualEntity $entity) : string
     {
         return $this->view->render('income', array(
+            'currencies' => $this->getModuleService('currencyService')->fetchList(),
             'incomes' => $this->getModuleService('incomeService')->fetchAll(),
             'entity' => $entity
         ));
