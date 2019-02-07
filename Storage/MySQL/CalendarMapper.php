@@ -59,7 +59,7 @@ final class CalendarMapper extends AbstractMapper
             self::column('spending_id'),
             SpendingMapper::column('name') => 'spending',
             self::column('date'),
-            self::column('name'),
+            self::column('comment'),
             self::column('amount'),
             CurrencyMapper::column('code') => 'currency'
         ];

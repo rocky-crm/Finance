@@ -9,7 +9,7 @@ CREATE TABLE rocky_finance_calendar (
     `spending_id` INT DEFAULT NULL COMMENT 'Related spending ID',
     `currency_id` INT NOT NULL COMMENT 'Related currency ID',
     `date` DATE NOT NULL COMMENT 'Date of this payment',
-    `name` varchar(255) NOT NULL,
+    `comment` TEXT NOT NULL,
     `amount` FLOAT NOT NULL,
 
     FOREIGN KEY (spending_id) REFERENCES rocky_spending(id) ON DELETE CASCADE

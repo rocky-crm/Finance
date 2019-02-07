@@ -114,8 +114,8 @@ defined('KRYSTAL') or die;
             </div>
 
             <div class="form-group">
-                <label class="control-label"><?php $this->show('Name'); ?></label>
-                <?= Element::text('name', $entity['name'], ['class' => 'form-control', 'placeholder' => $this->translate('Purpose')]); ?>
+                <label class="control-label"><?php $this->show('Comment'); ?></label>
+                <?= Element::textarea('comment', $entity['comment'], ['class' => 'form-control', 'placeholder' => $this->translate('Purpose of this transaction')]); ?>
             </div>
 
             <div class="form-group">

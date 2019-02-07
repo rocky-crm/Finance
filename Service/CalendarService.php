@@ -39,7 +39,7 @@ final class CalendarService extends AbstractService
                ->setSpending($row['spending'] ?? null)
                ->setCurrencyId($row['currency_id'] ?? null)
                ->setDate($row['date'])
-               ->setName($row['name'])
+               ->setComment($row['comment'])
                ->setAmount($row['amount']);
 
         if (isset($row['currency'])) {
