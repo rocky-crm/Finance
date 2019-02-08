@@ -57,11 +57,12 @@ final class IncomeService extends AbstractService
     /**
      * Fetch all records
      * 
+     * @param int $currencyId Optional currency id constraint
      * @return arrau
      */
-    public function fetchAll() : array
+    public function fetchAll($currencyId = null) : array
     {
-        return $this->prepareResults($this->incomeMapper->fetchAll());
+        return $this->prepareResults($this->incomeMapper->fetchAll($currencyId));
     }
 
     /**

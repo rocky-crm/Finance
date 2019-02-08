@@ -25,10 +25,12 @@ final class IncomeMapper extends AbstractMapper
     /**
      * Fetch all records
      * 
+     * @param int $currencyId Optional currency id constraint
      * @return array
      */
-    public function fetchAll() : array
+    public function fetchAll($currencyId = null) : array
     {
+        // Columns to be selected
         $columns = [
             self::column('id'),
             self::column('currency_id'),
@@ -44,9 +46,14 @@ final class IncomeMapper extends AbstractMapper
                        // Currency relation
                        ->leftJoin(CurrencyMapper::getTableName(), [
                             CurrencyMapper::column('id') => self::getRawColumn('currency_id')
-                       ])
-                       ->orderBy($this->getPk())
-                       ->desc();
+                       ]);
+
+        if ($currencyId !== null) {
+            $db->whereEquals(self::column('currency_id'), $currencyId);
+        }
+
+        $db->orderBy($this->getPk())
+           ->desc();
 
         return $db->queryAll();
     }
