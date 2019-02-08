@@ -11,6 +11,10 @@ defined('KRYSTAL') or die;
 <form action="<?= $this->url('Finance:Calendar@pivotAction', null); ?>">
     <div class="row">
         <div class="col-lg-2">
+            <?= Element::select('report_type', $reportTypes, $reportType, ['class' => 'form-control']); ?>
+        </div>
+
+        <div class="col-lg-2">
             <?= Element::select('currency_id', $currencies, $currencyId, ['class' => 'form-control']); ?>
         </div>
 
@@ -25,7 +29,7 @@ defined('KRYSTAL') or die;
 <table class="table table-bordered table-condensed table-striped">
     <thead>
         <tr>
-            <th>Spending</th>
+            <th><?= $spendMode ? 'Spending' : 'From'; ?></th>
             <th>Amount</th>
         </tr>
     </thead>
@@ -38,23 +42,23 @@ defined('KRYSTAL') or die;
         
         <?php foreach($item['details'] as $detail): ?>
         <tr>
-            <td><?= $detail['spending']; ?></td>
+            <td><?= $spendMode ? $detail['spending'] : $detail['from']; ?></td>
             <td><?= number_format($detail['amount'])  . PHP_EOL . $data['currency']; ?></td>
         </tr>
         <?php endforeach; ?>
         
         <tr>
             <td colspan="2">
-                <span class="pull-right">Total spent: <?= number_format($item['sum'])  . PHP_EOL . $data['currency']; ?></span>
+                <span class="pull-right"><?= $spendMode ? 'Total spent' : 'Total received'; ?>: <?= number_format($item['sum'])  . PHP_EOL . $data['currency']; ?></span>
             </td>
         </tr>
         
         <?php endforeach; ?>
     </tbody>
-    
+
     <tfoot>
         <tr class="info">
-            <td>Total spends: <?= number_format($data['spendings']); ?></td>
+            <td><?= $spendMode ? 'Total spends' : 'Total received'; ?>: <?= number_format($data['spendings']); ?></td>
             <td>Total sum: <?= number_format($data['total'])  . PHP_EOL . $data['currency']; ?></td>
         </tr>
     </tfoot>

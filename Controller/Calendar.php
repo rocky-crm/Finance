@@ -2,9 +2,11 @@
 
 namespace Finance\Controller;
 
+use UnexpectedValueException;
 use Krystal\Date\TimeHelper;
 use Krystal\Stdlib\VirtualEntity;
 use Site\Controller\AbstractCrmController;
+use Finance\Collection\ReportTypeCollection;
 
 final class Calendar extends AbstractCrmController
 {
@@ -15,12 +17,27 @@ final class Calendar extends AbstractCrmController
      */
     public function pivotAction() : string
     {
+        // Request variables
         $currencyId = $this->request->getQuery('currency_id', 1);
+        $reportType = $this->request->getQuery('report_type', ReportTypeCollection::TYPE_SPEND);
+
+        if (ReportTypeCollection::TYPE_SPEND == $reportType) {
+            $spendMode = true;
+            $data = $this->getModuleService('calendarService')->getPivotData($currencyId);
+        } else if (ReportTypeCollection::TYPE_INCOME == $reportType) {
+            $spendMode = false;
+            $data = $this->getModuleService('incomeService')->getPivotData($currencyId);
+        } else {
+            throw new UnexpectedValueException(sprintf('Unknown report type value supplied "%s"', $reportType));
+        }
 
         return $this->view->render('pivot', [
-            'data' => $this->getModuleService('calendarService')->getPivotData($currencyId),
+            'data' => $data,
             'currencies' => $this->getModuleService('currencyService')->fetchList(),
-            'currencyId' => $currencyId
+            'currencyId' => $currencyId,
+            'reportTypes' => (new ReportTypeCollection)->getAll(),
+            'reportType' => $reportType,
+            'spendMode' => $spendMode // Mode to handle captions in tables
         ]);
     }
 
