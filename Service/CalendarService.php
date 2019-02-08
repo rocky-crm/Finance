@@ -50,16 +50,14 @@ final class CalendarService extends AbstractService
     }
 
     /**
-     * Creates pivot data
+     * Parse raw data to be converted to pivot
      * 
-     * @param int $currencyId Attached currency id
+     * @param array $rows
      * @return array
      */
-    public function getPivotData(int $currencyId) : array
+    public static function parsePivotData(array $rows) : array
     {
         $output = [];
-
-        $rows = $this->calendarMapper->fetchAll($currencyId, null);
         $partition = ArrayUtils::arrayPartition($rows, 'date', false);
 
         // Counters
@@ -91,6 +89,17 @@ final class CalendarService extends AbstractService
             'spendings' => $spendings,
             'data' => $output
         ];
+    }
+
+    /**
+     * Creates pivot data
+     * 
+     * @param int $currencyId Attached currency id
+     * @return array
+     */
+    public function getPivotData(int $currencyId) : array
+    {
+        return self::parsePivotData($this->calendarMapper->fetchAll($currencyId, null));
     }
 
     /**
