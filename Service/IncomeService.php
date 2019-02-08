@@ -66,6 +66,17 @@ final class IncomeService extends AbstractService
     }
 
     /**
+     * Creates pivot data
+     * 
+     * @param int $currencyId Attached currency id
+     * @return array
+     */
+    public function getPivotData(int $currencyId) : array
+    {
+        return CalendarService::parsePivotData($this->incomeMapper->fetchAll($currencyId));
+    }
+
+    /**
      * Deletes a record by its id
      * 
      * @param int $id
