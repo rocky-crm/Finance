@@ -6,6 +6,18 @@ defined('KRYSTAL') or die;
 
 ?>
 
+<style>
+
+table thead tr th,
+table tfoot tr td {
+    background-color: #71acca !important;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+</style>
+
 <h2 class="page-header"><?php $this->show('Pivot table'); ?></h2>
 
 <form action="<?= $this->url('Finance:Calendar@pivotAction', null); ?>">
